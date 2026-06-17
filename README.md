@@ -1,118 +1,291 @@
-# Mobile Privacy Hardening Guide
-Practical settings to reduce mobile tracking, advertising identifiers, and unnecessary data exposure on iOS and Android.
+# Phone Hardening Guide
+> Practical settings to reduce mobile tracking, advertising identifiers, and data exposure on iOS and Android.
 
-________________________________________________________________________________________________________________________
+**Threat model:** Reduce passive tracking, advertising profiling, and network-based device identification. Not designed for physical seizure or nation-state adversaries.
 
-## App Tracking Control (iOS)
+---
 
-- Disable “Allow Apps to Request to Track”
+## Table of Contents
 
-Path:
-Settings → Privacy & Security → Tracking → OFF
+- [Recommended OS](#recommended-os)
+- [iOS Hardening](#ios-hardening)
+- [Android Hardening](#android-hardening)
+- [Network Privacy](#network-privacy)
+- [App Hygiene](#app-hygiene)
+- [Browser](#browser)
+- [Communication](#communication)
+- [Physical Security](#physical-security)
+- [Common Mistakes](#common-mistakes)
 
-### Effect
+---
 
-- Reduces advertising ID correlation
-- Blocks most cross-app tracking requests
-- Limits third-party profiling
+## Recommended OS
 
-________________________________________________________________________________________________________________________
+| OS | Platform | Notes |
+|----|----------|-------|
+| **GrapheneOS** | Android (Pixel only) | Best privacy/security on Android. Sandboxed Google Play available. |
+| **CalyxOS** | Android (Pixel) | MicroG-based, easier transition from stock Android |
+| **Stock iOS** (hardened) | iPhone | Good baseline if hardened correctly. iCloud is a risk. |
+| **Stock Android** (hardened) | Any | Last resort. Remove as many Google services as possible. |
 
-## Location History (iOS)
+**Recommendation:** GrapheneOS on a Pixel device is the strongest option available today.
 
-- Disable Significant Locations
+---
 
-Path:
-Settings → Privacy & Security → Location Services → System Services → Significant Locations → OFF
+## iOS Hardening
 
-### Effect
+### Privacy & Tracking
 
-- Stops local device location history storage
-- Reduces long-term movement profiling
+```
+Settings → Privacy & Security → Tracking
+  ✗ Allow Apps to Request to Track → OFF
+```
+Blocks IDFA (Advertising ID) requests from all apps.
 
-________________________________________________________________________________________________________________________
+```
+Settings → Privacy & Security → Apple Advertising
+  ✗ Personalised Ads → OFF
+```
 
-## Permission Audit (Android)
+### Location Services
 
-Review and restrict permissions:
+```
+Settings → Privacy & Security → Location Services
+  → Each app: set to "While Using" or "Never" — never "Always"
+  → System Services → Significant Locations → OFF
+  → System Services → iPhone Analytics → OFF
+  → System Services → Routing & Traffic → OFF
+```
 
-- Location
-- Camera
-- Microphone
-- Files & Media
+### Analytics & Diagnostics
 
-Path:
+```
+Settings → Privacy & Security → Analytics & Improvements
+  ✗ Share iPhone Analytics → OFF
+  ✗ Share iCloud Analytics → OFF
+  ✗ Improve Siri & Dictation → OFF
+```
+
+### iCloud (high risk)
+
+```
+Settings → [Your Name] → iCloud
+  → Review every toggle — disable anything not strictly needed
+  → iCloud Backup: OFF (backs up all your data to Apple servers)
+  → Photos: OFF (unless you need cross-device sync)
+```
+
+iCloud backup stores your messages, photos, and app data on Apple's servers. Law enforcement requests can access this data.
+
+### Siri
+
+```
+Settings → Siri & Search
+  ✗ Listen for "Hey Siri" → OFF
+  ✗ Siri Suggestions in Search → OFF
+  ✗ Siri Suggestions in Look Up → OFF
+```
+
+### Lockscreen & Passcode
+
+```
+Settings → Face ID & Passcode
+  → Use a 6-digit PIN minimum (alphanumeric is stronger)
+  → Allow Access When Locked: disable everything not needed
+  → Erase Data after 10 failed attempts → ON (optional, destructive)
+```
+
+### AirDrop
+
+```
+Settings → General → AirDrop → Receiving Off (when not in use)
+```
+
+---
+
+## Android Hardening
+
+### Advertising ID
+
+```
+Settings → Privacy → Ads
+  → Delete advertising ID
+```
+On Android 12+: Delete the Advertising ID entirely — don't just opt out of personalization.
+
+### Permission Audit
+
+```
 Settings → Privacy → Permission Manager
+  → Review each permission category
+  → Revoke: Location, Camera, Microphone, Files for apps that don't need them
+```
 
-### Rule
+Rules:
+- Location: "While using" only — never always-on for apps that don't require it
+- Microphone: revoke for all apps that don't need voice input
+- Camera: revoke for everything except camera app and video call apps
 
-Only grant permissions when strictly required for functionality.
+### Network Permissions (Android 14+)
 
-________________________________________________________________________________________________________________________
+```
+Settings → Privacy → Permission Manager → Network
+  → Restrict background network access per app
+```
 
-## Microphone Control (iOS / Android)
+### Sensors Off (Developer Options)
 
-- Monitor microphone access indicators
-- Disable microphone access for non-essential apps
-- Use system-level privacy indicators when available
+```
+Settings → Developer Options → Quick Settings Developer Tiles
+  → Add "Sensors Off" tile
+```
+Disables all sensors (camera, mic, accelerometer, etc.) system-wide. Use when needed.
 
-### Effect
+### Work Profile (GrapheneOS / Samsung)
 
-- Reduces passive audio access risk
-- Improves visibility over background usage
-________________________________________________________________________________________________________________________
+Use a work profile to isolate apps you don't fully trust:
+- Install social media, banking, or corporate apps in the work profile
+- Turn the work profile off when not in use — apps in it cannot run in the background
 
-## WiFi Privacy Hardening
+---
 
-Enable randomized MAC address:
+## Network Privacy
 
-- iOS: Private Wi-Fi Address → ON
-- Android: MAC Randomization → ON
+### WiFi
 
-### Effect
+```
+iOS:   Settings → Wi-Fi → [Network] → Private Wi-Fi Address → ON (rotate per network)
+Android: Settings → Wi-Fi → [Network] → Privacy → Use randomized MAC
+```
 
-- Prevents persistent device tracking across WiFi networks
-- Reduces local network profiling
+Prevents device fingerprinting across WiFi networks.
 
-________________________________________________________________________________________________________________________
-
-## Bluetooth Privacy
+### Bluetooth
 
 - Disable Bluetooth when not in use
-- Restrict unnecessary app access to Bluetooth services
+- Never leave Bluetooth discoverable in public
+- Review which apps have Bluetooth access and revoke if unnecessary
 
-Path (Android):
-Settings → Privacy → Bluetooth permissions
+### VPN
 
-### Effect
+- Use always-on VPN with kill switch
+- Recommended: Mullvad, ProtonVPN, IVPN
+- WireGuard protocol preferred
 
-- Reduces proximity-based tracking vectors
-- Limits background device discovery exposure
+```
+iOS:   Settings → General → VPN & Device Management → VPN → Connect On Demand
+Android: Settings → Network & Internet → VPN → [VPN name] → Always-on VPN + Block connections without VPN
+```
 
-________________________________________________________________________________________________________________________
+### DNS
 
-## Screenshot & Media Metadata
+- Use encrypted DNS (DoH / DoT)
+- iOS: Settings → General → VPN & Device Management → DNS → Add DoH profile
+- Android: Settings → Network & Internet → Private DNS → Enter DoH hostname
 
-- Screenshots generally do not include GPS data
-- Re-encoding can reintroduce metadata depending on apps
+Providers: `dns.mullvad.net`, `1dot1dot1dot1.cloudflare-dns.com`, `dns.nextdns.io/your-id`
 
-### Recommended handling
+---
 
-- Share sensitive media via privacy-focused apps (e.g. Signal)
+## App Hygiene
 
-### Effect
+| Action | Why |
+|--------|-----|
+| Install only apps you actively use | Each app is a potential data source |
+| Use browser instead of app where possible | Apps have broader OS access than web pages |
+| Review permissions after every install | Apps request more than they need by default |
+| Disable background app refresh | Reduces passive data collection |
+| Use open-source alternatives where possible | Auditable code, no hidden tracking |
 
-- Reduces metadata retention during sharing workflows
+### Open-source replacements
 
-________________________________________________________________________________________________________________________
+| Instead of | Use |
+|------------|-----|
+| Google Maps | OsmAnd, Organic Maps |
+| Chrome | Firefox (hardened), Brave |
+| Gmail | Proton Mail, Tutanota |
+| Google Photos | Ente Photos (E2EE), local storage |
+| WhatsApp | Signal, SimpleX |
+| Google Authenticator | Aegis (Android), Raivo (iOS) |
 
-## Final
+---
 
-These settings reduce:
+## Browser
 
-- Cross-app tracking
-- Device-level advertising correlation
-- Passive location history storage
-- Network-based device identification
+### Android
+- **Firefox** with uBlock Origin
+- **Brave** (built-in ad/tracker blocking)
+- **Mull** (GrapheneOS — hardened Firefox fork)
 
-They do not provide full anonymity but significantly reduce mobile data exposure.
+### iOS
+- **Firefox Focus** (strong tracking protection, no history)
+- **Safari** with aggressive content blockers (1Blocker, AdGuard)
+
+### Settings
+- Block third-party cookies
+- Enable HTTPS-only mode
+- Clear cookies on close
+
+---
+
+## Communication
+
+| Tool | Use case |
+|------|----------|
+| **Signal** | Trusted contacts, voice calls, disappearing messages |
+| **Session** | No phone number required, decentralized |
+| **SimpleX** | Maximum metadata protection |
+| **Matrix** | Self-hosted option |
+
+### Rules
+- Use disappearing messages by default
+- Do not grant contacts access to your full phonebook
+- Use separate accounts per context if possible
+
+---
+
+## Physical Security
+
+- Set strong passcode (alphanumeric preferred)
+- Enable biometric unlock only if you trust the implementation
+- Enable remote wipe (Find My on iOS, Find My Device on Android)
+- Disable USB data connection when locked:
+  - iOS: Settings → Face ID & Passcode → USB Accessories → OFF
+  - Android: Developer Options → Default USB configuration → No data transfer
+- Never leave phone unlocked and unattended in public
+
+---
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---------|-----|
+| "Always" location access for most apps | Change to "While Using" or "Never" |
+| iCloud backup enabled | Disable or encrypt sensitive data before backup |
+| Bluetooth always on | Turn off when not in use |
+| Default browser with tracking | Switch to hardened alternative |
+| WhatsApp for sensitive conversations | Use Signal or Session |
+| Skipping system updates | Update immediately — patches fix active exploits |
+| Same Google account on work and personal profiles | Use separate accounts or work profile |
+
+---
+
+## Quick Reference
+
+```
+OS         →  GrapheneOS (Pixel) or hardened iOS
+Advertising→  Delete IDFA / Advertising ID
+Location   →  While Using only — no Always
+VPN        →  Always-on + kill switch (Mullvad / ProtonVPN)
+DNS        →  DoH or DoT
+WiFi       →  Randomized MAC per network
+Bluetooth  →  Off when not in use
+Browser    →  Firefox + uBlock Origin / Brave
+Comms      →  Signal / Session / SimpleX
+Updates    →  Automatic, install immediately
+```
+
+---
+
+> These settings reduce cross-app tracking, device-level profiling, and network-based identification.  
+> They do not provide full anonymity but significantly reduce mobile data exposure.
