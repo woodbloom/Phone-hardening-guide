@@ -1,4 +1,4 @@
-# 📱 Phone Hardening Guide
+# Phone Hardening Guide
 
 > by [woodbloom](https://github.com/woodbloom)
 
@@ -13,7 +13,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Recommended Operating Systems](#-recommended-operating-systems)
 - [GrapheneOS — Complete Setup](#-grapheneos--complete-setup)
@@ -38,7 +38,7 @@
 
 ---
 
-## 📱 Recommended Operating Systems
+## Recommended Operating Systems
 
 | OS | Device | Privacy | Security | Anonymity | Notes |
 |----|--------|---------|---------|-----------|-------|
@@ -63,7 +63,7 @@
 
 ---
 
-## ⚙️ GrapheneOS — Complete Setup
+## GrapheneOS — Complete Setup
 
 ### Installation
 
@@ -178,7 +178,7 @@ Settings → System → Multiple users → Add user → Install sandboxed Play t
 
 ---
 
-## 🐦 CalyxOS Setup
+## CalyxOS Setup
 
 ```
 # Download from: https://calyxos.org/install/
@@ -201,7 +201,7 @@ Settings → Apps → MicroG Services → Permissions
 
 ---
 
-## 🔓 DivestOS
+## DivestOS
 
 ```
 # Download from: https://divestos.org/pages/downloads
@@ -220,7 +220,7 @@ Post-install hardening same as Android Stock section below.
 
 ---
 
-## 🍎 iOS Hardening — Every Setting
+## iOS Hardening — Every Setting
 
 ### Tracking & Advertising
 
@@ -408,7 +408,7 @@ Always keep off in public.
 
 ---
 
-## 🤖 Android Stock Hardening
+## Android Stock Hardening
 
 ### Delete Advertising ID
 
@@ -527,7 +527,7 @@ Settings → Developer Options:
 
 ---
 
-## 🌐 Network Privacy
+## Network Privacy
 
 ### WiFi — MAC Randomization
 
@@ -629,7 +629,7 @@ iOS: Settings → Privacy & Security → Location Services → System Services
 
 ---
 
-## 📡 SIM Card & Carrier Hardening
+## SIM Card & Carrier Hardening
 
 ### Enable SIM PIN
 
@@ -698,7 +698,7 @@ Protection:
 
 ---
 
-## 🛡️ IMSI Catcher Protection
+## IMSI Catcher Protection
 
 IMSI catchers (Stingrays, DRTBOX) are fake cell towers used by law enforcement and some attackers to:
 - Track your real-time location
@@ -762,7 +762,7 @@ AIMSICD (Android, open source):
 
 ---
 
-## 📲 App Hygiene & Permission Audit
+## App Hygiene & Permission Audit
 
 ### Minimal Installation Principle
 
@@ -831,7 +831,7 @@ Check for:
 
 ---
 
-## 🌍 Browser — Mobile
+## Browser — Mobile
 
 ### Android Browser Ranking
 
@@ -890,7 +890,7 @@ Recommended filter lists to enable:
 
 ---
 
-## 🔑 Password Management & 2FA
+## Password Management & 2FA
 
 ### Mobile Password Managers
 
@@ -931,7 +931,7 @@ Backup your TOTP codes:
 
 ---
 
-## 💬 Secure Communication
+## Secure Communication
 
 | App | Anonymity | Metadata | Phone Nr | E2EE | Best For |
 |-----|---------|---------|---------|------|---------|
@@ -995,7 +995,7 @@ Completely offline (no internet):
 
 ---
 
-## 🔒 Physical Security
+## Physical Security
 
 ### Passcode Strength
 
@@ -1081,7 +1081,7 @@ Solutions:
 
 ---
 
-## 🎛️ Sensor & Hardware Privacy
+## Sensor & Hardware Privacy
 
 ### What Sensors Your Phone Has
 
@@ -1162,7 +1162,7 @@ at larger distances. Mostly theoretical risk but worth disabling.
 
 ---
 
-## 💾 Backup Strategy
+## Backup Strategy
 
 | Method | Security | Risk | Notes |
 |--------|---------|------|-------|
@@ -1206,7 +1206,7 @@ A backup without encryption doesn't include passwords or Health data.
 
 ---
 
-## 🔄 Open Source App Replacements
+## Open Source App Replacements
 
 | Instead of | Use | Platform | Why |
 |------------|-----|---------|-----|
@@ -1233,7 +1233,7 @@ A backup without encryption doesn't include passwords or Health data.
 
 ---
 
-## 🧪 Threat-Specific Scenarios
+## Threat-Specific Scenarios
 
 ### Scenario: Crossing a Border
 
@@ -1299,7 +1299,7 @@ which could restore the stalkerware too)
 
 ---
 
-## ⚠️ Common Mistakes
+## Common Mistakes
 
 | Mistake | Fix |
 |---------|-----|
@@ -1322,7 +1322,7 @@ which could restore the stalkerware too)
 
 ---
 
-## ⚡ Quick Reference
+## Quick Reference
 
 ```
 OS            →  GrapheneOS (Pixel) best · CalyxOS (easier) · DivestOS (more devices)
